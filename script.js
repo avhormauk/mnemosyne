@@ -1,6 +1,9 @@
 let deck = [];
 let currentIndex = 0;
 let isFlipped = false;
+let completedCount = 0;
+let againCount = 0;
+let hardCount = 0;
 
 function parseFlashcards(text) {
     const lines = text.split('\n');
@@ -50,19 +53,45 @@ function parseFlashcards(text) {
     return cards;
 }
 
+function shuffleArray(array) {
+    const shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+}
+
 function startStudying() {
     const input = document.getElementById('card-input').value;
-    deck = parseFlashcards(input);
+    let cards = parseFlashcards(input);
 
-    if (deck.length === 0) {
-        alert('No flashcards found. Please check your formatting.');
+    if (cards.length === 0) {
+        alert('no flashcards found. please check your formatting.');
         return;
     }
 
+    // Check if shuffle is enabled
+    const shouldShuffle = document.getElementById('shuffle-checkbox').checked;
+    if (shouldShuffle) {
+        cards = shuffleArray(cards);
+    }
+
+    deck = cards;
     document.getElementById('input-screen').style.display = 'none';
     document.getElementById('study-screen').style.display = 'block';
     currentIndex = 0;
+    completedCount = 0;
+    againCount = 0;
+    hardCount = 0;
     showCard();
+}
+
+function updateStats() {
+    const stats = document.getElementById('stats');
+    stats.innerHTML = `
+        ${deck.length} remaining • ${completedCount} completed • ${againCount} again • ${hardCount} hard
+    `;
 }
 
 function showCard() {
@@ -73,13 +102,16 @@ function showCard() {
 
     isFlipped = false;
     const card = deck[currentIndex];
-    const cardDisplay = document.getElementById('card-display');
+    const questionEl = document.getElementById('card-question');
+    const answerEl = document.getElementById('card-answer');
     const controls = document.getElementById('controls');
-    const counter = document.getElementById('counter');
 
-    counter.textContent = `${deck.length} cards remaining`;
-    cardDisplay.innerHTML = `<div class="card-front">${card.front}</div>`;
+    questionEl.textContent = card.front;
+    answerEl.textContent = '';
+    answerEl.classList.remove('visible');
     controls.style.display = 'none';
+    
+    updateStats();
 }
 
 function flipCard() {
@@ -87,19 +119,18 @@ function flipCard() {
 
     isFlipped = true;
     const card = deck[currentIndex];
-    const cardDisplay = document.getElementById('card-display');
+    const answerEl = document.getElementById('card-answer');
     const controls = document.getElementById('controls');
 
-    cardDisplay.innerHTML = `
-        <div class="card-front">${card.front}</div>
-        <div class="card-back">${card.back}</div>
-    `;
+    answerEl.textContent = card.back;
+    answerEl.classList.add('visible');
     controls.style.display = 'flex';
 }
 
 function handleEasy() {
     // Remove card from deck
     deck.splice(currentIndex, 1);
+    completedCount++;
     
     // Adjust index if needed
     if (currentIndex >= deck.length) {
@@ -113,6 +144,7 @@ function handleHard() {
     // Move card to back of deck
     const card = deck.splice(currentIndex, 1)[0];
     deck.push(card);
+    hardCount++;
     
     // Stay at same index (which now has the next card)
     if (currentIndex >= deck.length) {
@@ -127,6 +159,7 @@ function handleAgain() {
     const card = deck.splice(currentIndex, 1)[0];
     const newPosition = Math.min(currentIndex + 3, deck.length);
     deck.splice(newPosition, 0, card);
+    againCount++;
     
     // Move to next card
     if (currentIndex >= deck.length) {
@@ -140,11 +173,34 @@ function showComplete() {
     const studyScreen = document.getElementById('study-screen');
     studyScreen.innerHTML = `
         <div class="complete-screen">
-            <h1>Session Complete</h1>
-            <p>All cards reviewed.</p>
-            <button onclick="location.reload()">Start Over</button>
+            <h1>session complete</h1>
+            <p>all cards reviewed.</p>
+            <button onclick="location.reload()">start over</button>
         </div>
     `;
+}
+
+function openEdit() {
+    document.getElementById('study-screen').style.display = 'none';
+    document.getElementById('input-screen').style.display = 'block';
+}
+
+function toggleTheme() {
+    document.body.classList.toggle('dark-mode');
+}
+
+function copyText() {
+    const textarea = document.getElementById('card-input');
+    textarea.select();
+    document.execCommand('copy');
+}
+
+function pasteText() {
+    navigator.clipboard.readText().then(text => {
+        document.getElementById('card-input').value = text;
+    }).catch(err => {
+        console.error('failed to paste:', err);
+    });
 }
 
 // Keyboard controls
