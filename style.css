@@ -275,8 +275,11 @@ html.dark-mode .shuffle-button[aria-pressed="true"] {
 }
 
 .start-button {
-    display: block;
-    margin: 0 auto;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    display: inline-block;
+    margin: 0;
 }
 
 .card-back.visible {
