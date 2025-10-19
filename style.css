@@ -4,6 +4,10 @@
     box-sizing: border-box;
 }
 
+html, body, textarea, button, .help-content {
+    transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
 body {
     font-family: 'Times New Roman', Times, serif;
     background: white;
@@ -13,40 +17,39 @@ body {
     justify-content: center;
     align-items: center;
     padding: 20px;
-    transition: all 0.3s ease;
 }
 
-body.dark-mode {
+html.dark-mode body {
     background: #1a1a1a;
     color: #e0e0e0;
 }
 
-body.dark-mode textarea,
-body.dark-mode button {
+html.dark-mode textarea,
+html.dark-mode button {
     background: #2a2a2a;
     color: #e0e0e0;
     border-color: #444;
 }
 
-body.dark-mode button:hover {
+html.dark-mode button:hover {
     background: #444;
     color: white;
 }
 
-body.dark-mode .shuffle-button[aria-pressed="true"] {
+html.dark-mode .shuffle-button[aria-pressed="true"] {
     background: #444;
     color: white;
 }
 
-body.dark-mode .card-back {
+html.dark-mode .card-back {
     border-top-color: #444;
 }
 
-body.dark-mode .stats {
+html.dark-mode .stats {
     color: #999;
 }
 
-body.dark-mode .theme-toggle {
+html.dark-mode .theme-toggle {
     background: #2a2a2a;
     color: #e0e0e0;
     border-color: #444;
@@ -266,7 +269,7 @@ h1 {
     margin-bottom: 15px;
 }
 
-body.dark-mode .help-content {
+html.dark-mode .help-content {
     background: #2a2a2a;
     color: #e0e0e0;
 }
@@ -280,7 +283,7 @@ body.dark-mode .help-content {
     font-family: monospace;
 }
 
-body.dark-mode .help-content pre {
+html.dark-mode .help-content pre {
     background: #1a1a1a;
 }
 
@@ -302,6 +305,6 @@ label {
     text-align: center;
 }
 
-body.dark-mode .stats {
+html.dark-mode .stats {
     color: #999;
 }
