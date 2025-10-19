@@ -62,6 +62,70 @@ function shuffleArray(array) {
     return shuffled;
 }
 
+let deck = [];
+let currentIndex = 0;
+let isFlipped = false;
+let completedCount = 0;
+let againCount = 0;
+let hardCount = 0;
+
+function parseFlashcards(text) {
+    const lines = text.split('\n');
+    const cards = [];
+    let currentFront = null;
+    let currentBack = [];
+
+    for (let line of lines) {
+        line = line.trim();
+        
+        // Skip comments and empty lines
+        if (line.startsWith('##') || line === '') {
+            continue;
+        }
+
+        // New card front
+        if (line.startsWith('**')) {
+            // Save previous card if exists
+            if (currentFront !== null && currentBack.length > 0) {
+                cards.push({
+                    front: currentFront,
+                    back: currentBack.join('\n').trim()
+                });
+            }
+            // Start new card
+            currentFront = line.substring(2).trim();
+            currentBack = [];
+        }
+        // Card back content
+        else if (line.startsWith('//')) {
+            currentBack.push(line.substring(2).trim());
+        }
+        // Continuation of back content
+        else if (currentFront !== null) {
+            currentBack.push(line);
+        }
+    }
+
+    // Don't forget the last card
+    if (currentFront !== null && currentBack.length > 0) {
+        cards.push({
+            front: currentFront,
+            back: currentBack.join('\n').trim()
+        });
+    }
+
+    return cards;
+}
+
+function shuffleArray(array) {
+    const shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+}
+
 function toggleHelp() {
     const modal = document.getElementById('help-modal');
     modal.classList.toggle('visible');
@@ -92,8 +156,13 @@ function startStudying() {
     }
 
     deck = cards;
+    deck = cards;
     document.getElementById('input-screen').style.display = 'none';
     document.getElementById('study-screen').style.display = 'block';
+    currentIndex = 0;
+    completedCount = 0;
+    againCount = 0;
+    hardCount = 0;
     currentIndex = 0;
     completedCount = 0;
     againCount = 0;
@@ -106,7 +175,29 @@ function updateStats() {
     stats.textContent = deck.length;
 }
 
+function updateStats() {
+    const stats = document.getElementById('stats');
+    stats.textContent = deck.length;
+}
+
 function showCard() {
+    if (deck.length === 0) {
+        showComplete();
+        return;
+    }
+
+    isFlipped = false;
+    const card = deck[currentIndex];
+    const questionEl = document.getElementById('card-question');
+    const answerEl = document.getElementById('card-answer');
+    const controls = document.getElementById('controls');
+
+    questionEl.textContent = card.front;
+    answerEl.textContent = '';
+    answerEl.classList.remove('visible');
+    controls.style.display = 'none';
+    
+    updateStats();
     if (deck.length === 0) {
         showComplete();
         return;
@@ -137,8 +228,29 @@ function flipCard() {
     answerEl.textContent = card.back;
     answerEl.classList.add('visible');
     controls.style.display = 'flex';
+    if (isFlipped) return;
+
+    isFlipped = true;
+    const card = deck[currentIndex];
+    const answerEl = document.getElementById('card-answer');
+    const controls = document.getElementById('controls');
+
+    answerEl.textContent = card.back;
+    answerEl.classList.add('visible');
+    controls.style.display = 'flex';
 }
 
+function handleEasy() {
+    // Remove card from deck
+    deck.splice(currentIndex, 1);
+    completedCount++;
+    
+    // Adjust index if needed
+    if (currentIndex >= deck.length) {
+        currentIndex = 0;
+    }
+    
+    showCard();
 function handleEasy() {
     // Remove card from deck
     deck.splice(currentIndex, 1);
@@ -164,6 +276,17 @@ function handleHard() {
     }
     
     showCard();
+    // Move card to back of deck
+    const card = deck.splice(currentIndex, 1)[0];
+    deck.push(card);
+    hardCount++;
+    
+    // Stay at same index (which now has the next card)
+    if (currentIndex >= deck.length) {
+        currentIndex = 0;
+    }
+    
+    showCard();
 }
 
 function handleAgain() {
@@ -176,7 +299,18 @@ function handleAgain() {
     // Move to next card
     if (currentIndex >= deck.length) {
         currentIndex = 0;
+function handleAgain() {
+    // Move card 3 positions back
+    const card = deck.splice(currentIndex, 1)[0];
+    const newPosition = Math.min(currentIndex + 3, deck.length);
+    deck.splice(newPosition, 0, card);
+    againCount++;
+    
+    // Move to next card
+    if (currentIndex >= deck.length) {
+        currentIndex = 0;
     }
+    
     
     showCard();
 }
@@ -190,10 +324,21 @@ function showComplete() {
         <div class="controls">
             <button onclick="restartSession()">start over</button>
         </div>
+function showComplete() {
+    const studyScreen = document.getElementById('study-screen');
+    const content = `
+        <div class="card-container completion">
+            <div class="card-front">all cards reviewed</div>
+        </div>
+        <div class="controls">
+            <button onclick="restartSession()">start over</button>
+        </div>
     `;
+    studyScreen.innerHTML = content;
     studyScreen.innerHTML = content;
 }
 
+function openEdit() {
 function openEdit() {
     document.getElementById('study-screen').style.display = 'none';
     document.getElementById('input-screen').style.display = 'block';
