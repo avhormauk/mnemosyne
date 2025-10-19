@@ -13,6 +13,28 @@ body {
     justify-content: center;
     align-items: center;
     padding: 20px;
+    transition: background 0.3s, color 0.3s;
+}
+
+body.dark-mode {
+    background: #1a1a1a;
+    color: #e0e0e0;
+}
+
+body.dark-mode textarea,
+body.dark-mode button {
+    background: #2a2a2a;
+    color: #e0e0e0;
+    border-color: #444;
+}
+
+body.dark-mode button:hover {
+    background: #444;
+    color: white;
+}
+
+body.dark-mode .card-back {
+    border-top-color: #444;
 }
 
 .container {
@@ -74,6 +96,7 @@ button:active {
     font-size: 24px;
     line-height: 1.6;
     white-space: pre-wrap;
+    cursor: pointer;
 }
 
 .card-front {
@@ -84,6 +107,11 @@ button:active {
     margin-top: 40px;
     padding-top: 40px;
     border-top: 1px solid #ccc;
+    display: none;
+}
+
+.card-back.visible {
+    display: block;
 }
 
 .controls {
@@ -115,4 +143,34 @@ h1 {
     font-size: 32px;
     margin-bottom: 20px;
     font-weight: normal;
+}
+
+.theme-toggle {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    font-size: 24px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+label {
+    display: block;
+    margin: 15px 0;
+    font-size: 16px;
+}
+
+.stats {
+    margin-bottom: 30px;
+    font-size: 16px;
+    color: #666;
+}
+
+body.dark-mode .stats {
+    color: #999;
 }
