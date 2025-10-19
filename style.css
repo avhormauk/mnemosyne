@@ -1,0 +1,118 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Times New Roman', Times, serif;
+    background: white;
+    color: black;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.container {
+    max-width: 800px;
+    width: 100%;
+}
+
+#input-screen {
+    display: block;
+}
+
+#study-screen {
+    display: none;
+    text-align: center;
+}
+
+textarea {
+    width: 100%;
+    min-height: 400px;
+    padding: 20px;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 16px;
+    border: 1px solid black;
+    resize: vertical;
+}
+
+textarea:focus {
+    outline: 2px solid black;
+}
+
+button {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 16px;
+    padding: 12px 24px;
+    margin: 10px 5px;
+    background: white;
+    color: black;
+    border: 1px solid black;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+button:hover {
+    background: black;
+    color: white;
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+.card {
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+    font-size: 24px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+}
+
+.card-front {
+    font-weight: normal;
+}
+
+.card-back {
+    margin-top: 40px;
+    padding-top: 40px;
+    border-top: 1px solid #ccc;
+}
+
+.controls {
+    margin-top: 40px;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.counter {
+    margin-bottom: 30px;
+    font-size: 18px;
+    color: #666;
+}
+
+.key-hint {
+    font-size: 14px;
+    color: #999;
+    margin-left: 8px;
+}
+
+.complete-screen {
+    text-align: center;
+    font-size: 24px;
+}
+
+h1 {
+    font-size: 32px;
+    margin-bottom: 20px;
+    font-weight: normal;
+}

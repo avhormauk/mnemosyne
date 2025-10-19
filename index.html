@@ -1,14 +1,36 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mnemosyne</title>
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <h1>Welcome to Mnemosyne</h1>
-    <p>This is a placeholder for now.</p>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div id="input-screen">
+            <h1>Mnemosyne</h1>
+            <textarea id="card-input" placeholder="Paste your flashcards here...
+
+##L1
+**what is a signal?
+//a signal is a function that conveys information...
+**what is a system?
+//a system is an operator that maps..."></textarea>
+            <button onclick="startStudying()">Start Studying</button>
+        </div>
+
+        <div id="study-screen">
+            <div class="counter" id="counter"></div>
+            <div class="card" id="card-display"></div>
+            <div class="controls" id="controls" style="display: none;">
+                <button onclick="handleAgain()">Again <span class="key-hint">(1)</span></button>
+                <button onclick="handleHard()">Hard <span class="key-hint">(2)</span></button>
+                <button onclick="handleEasy()">Easy <span class="key-hint">(3)</span></button>
+            </div>
+        </div>
+    </div>
+
     <script src="script.js"></script>
-  </body>
+</body>
 </html>
