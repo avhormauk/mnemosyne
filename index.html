@@ -8,18 +8,18 @@
         /* Prevent flash by setting dark mode immediately */
         html.dark-mode,
         html.dark-mode body {
-            background: #1a1a1a !important;
-            color: #e0e0e0 !important;
+            background: #0d0d0d !important;
+            color: #e8e8e8 !important;
         }
         html.dark-mode textarea,
         html.dark-mode button {
-            background: #2a2a2a !important;
-            color: #e0e0e0 !important;
-            border-color: #444 !important;
+            background: #1a1a1a !important;
+            color: #e8e8e8 !important;
+            border-color: #333 !important;
         }
         html.dark-mode .shuffle-button[aria-pressed="true"] {
-            background: #e0e0e0 !important;
-            color: #1a1a1a !important;
+            background: #e8e8e8 !important;
+            color: #0d0d0d !important;
         }
     </style>
     <script>
@@ -61,7 +61,7 @@
 
         <div id="study-screen">
             <div class="stats" id="stats"></div>
-            <div class="hint-text" id="hint-text">space/click to flip • ← → to navigate</div>
+            <div class="hint-text" id="hint-text">space/click to flip  ← → to navigate</div>
             <div class="card-container" onclick="flipCard()">
                 <div class="card-front" id="card-question"></div>
                 <div class="card-back" id="card-answer"></div>
