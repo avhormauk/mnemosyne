@@ -191,23 +191,25 @@ function openEdit() {
 }
 
 function toggleTheme() {
-    document.body.classList.toggle('dark-mode');
-    // Save theme preference
-    localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+    const isDarkMode = !document.body.classList.contains('dark-mode');
+    if (isDarkMode) {
+        document.body.classList.add('dark-mode');
+    } else {
+        document.body.classList.remove('dark-mode');
+    }
+    localStorage.setItem('darkMode', isDarkMode);
 }
 
-function loadThemePreference() {
+// Load theme on page load
+document.addEventListener('DOMContentLoaded', () => {
     const darkMode = localStorage.getItem('darkMode') === 'true';
     if (darkMode) {
         document.body.classList.add('dark-mode');
     }
-}
+});
 
 function restartSession() {
-    // Preserve the current page state while reloading
-    const isDarkMode = document.body.classList.contains('dark-mode');
-    localStorage.setItem('darkMode', isDarkMode);
-    window.location.href = window.location.href;
+    location.reload();
 }
 
 // Load theme preference when page loads

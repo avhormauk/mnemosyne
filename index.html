@@ -5,18 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>mnemosyne</title>
     <script>
-        // Prevent flash by applying theme immediately
-        const darkMode = localStorage.getItem('darkMode') === 'true';
-        if (darkMode) {
-            document.documentElement.classList.add('dark-mode');
+        // Apply theme immediately if saved
+        if (localStorage.getItem('darkMode') === 'true') {
             document.body.classList.add('dark-mode');
         }
     </script>
-    <style>
-        html.dark-mode, html.dark-mode body {
-            background: #1a1a1a;
-        }
-    </style>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
