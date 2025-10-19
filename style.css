@@ -5,7 +5,7 @@
 }
 
 body {
-    font-family: 'Times New Roman', Times, serif;
+    font-family: Helvetica, Arial, sans-serif;
     background: white;
     color: black;
     min-height: 100vh;
@@ -14,6 +14,7 @@ body {
     align-items: center;
     padding: 20px;
     transition: all 0.3s ease;
+    overflow: hidden;
 }
 
 body.dark-mode {
@@ -77,10 +78,11 @@ textarea {
     width: 100%;
     min-height: 400px;
     padding: 20px;
-    font-family: 'Times New Roman', Times, serif;
+    font-family: Helvetica, Arial, sans-serif;
     font-size: 16px;
     border: 1px solid black;
-    resize: vertical;
+    resize: none;
+    overflow-y: auto;
 }
 
 textarea:focus {
@@ -88,7 +90,7 @@ textarea:focus {
 }
 
 button {
-    font-family: 'Times New Roman', Times, serif;
+    font-family: Helvetica, Arial, sans-serif;
     font-size: 16px;
     padding: 12px 24px;
     margin: 10px 5px;
@@ -215,7 +217,7 @@ body.dark-mode .shuffle-button[aria-pressed="true"] {
 h1 {
     font-size: 32px;
     margin-bottom: 20px;
-    font-weight: normal;
+    font-weight: bold;
 }
 
 .fixed-controls {

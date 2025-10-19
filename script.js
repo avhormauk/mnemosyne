@@ -248,15 +248,14 @@ document.addEventListener('DOMContentLoaded', () => {
         // Only process keyboard events if study screen is visible
         if (getComputedStyle(studyScreen).display === 'none') return;
         
-        // Don't process if we're at the completion screen
-        if (deck.length === 0) return;
-
         if (e.code === 'Space') {
             e.preventDefault();
-            if (!isFlipped) {
+            if (deck.length === 0) {
+                restartSession();
+            } else if (!isFlipped) {
                 flipCard();
             }
-        } else if (isFlipped) {
+        } else if (isFlipped && deck.length > 0) {
             if (e.key === '1') {
                 e.preventDefault();
                 handleAgain();
