@@ -315,24 +315,37 @@ h1 {
     cursor: pointer;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
     position: relative;
+    overflow: hidden;
 }
 
-.theme-toggle::after {
+.theme-toggle::before {
     content: '';
     position: absolute;
-    width: 20px;
-    height: 20px;
+    width: 16px;
+    height: 16px;
     background: #1a1a1a;
     border-radius: 50%;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    transition: background-color 0.3s ease;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 0 4px white, 
+                0 -23px 0 #1a1a1a, 
+                0 23px 0 #1a1a1a, 
+                23px 0 0 #1a1a1a,
+                -23px 0 0 #1a1a1a, 
+                16px 16px 0 #1a1a1a,
+                -16px -16px 0 #1a1a1a,
+                16px -16px 0 #1a1a1a,
+                -16px 16px 0 #1a1a1a;
 }
 
-body.dark-mode .theme-toggle::after,
-html.dark-mode .theme-toggle::after {
-    background: #e8e8e8;
+/* Dark mode moon */
+body.dark-mode .theme-toggle::before,
+html.dark-mode .theme-toggle::before {
+    background: transparent;
+    box-shadow: 8px -8px 0 0 #e8e8e8;
+    transform: translate(-50%, -50%) rotate(45deg) scale(0.8);
 }
 
 .theme-toggle:hover,
