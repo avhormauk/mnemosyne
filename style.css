@@ -131,17 +131,47 @@ button:active {
 .theme-toggle {
     position: fixed;
     top: 20px;
-    right: 20px;
+    left: 20px;
     padding: 8px 16px;
     font-size: 20px;
     z-index: 1000;
 }
 
-.edit-button {
-    position: absolute;
-    top: 0;
-    left: 0;
-    padding: 8px 16px;
+.center-controls {
+    max-width: 700px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.main-title {
+    font-size: 36px;
+    margin-bottom: 6px;
+}
+
+.shuffle-row {
+    display: flex;
+    justify-content: center;
+}
+
+.start-row {
+    display: flex;
+    justify-content: center;
+}
+
+.shuffle-button {
+    padding: 10px 20px;
+    border: 1px solid black;
+    background: white;
+    color: black;
+    cursor: pointer;
+}
+
+.shuffle-button[aria-pressed="true"] {
+    background: black;
+    color: white;
+    border-color: black;
 }
 
 .stats {
