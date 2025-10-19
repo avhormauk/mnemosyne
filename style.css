@@ -240,11 +240,19 @@ html.dark-mode .shuffle-button[aria-pressed="true"] {
 }
 
 .start-button {
-    position: relative;
+    position: absolute;
     left: 50%;
     transform: translateX(-50%);
     display: inline-block;
     margin: 0;
+}
+
+.start-button:hover {
+    transform: translateX(-50%) scale(1.02);
+}
+
+.start-button:active {
+    transform: translateX(-50%) scale(0.98);
 }
 
 .card-back.visible {
