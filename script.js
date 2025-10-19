@@ -71,9 +71,8 @@ function startStudying() {
         return;
     }
 
-    // Check if shuffle is enabled (shuffle-button uses aria-pressed)
-    const shuffleBtn = document.getElementById('shuffle-button');
-    const shouldShuffle = shuffleBtn && shuffleBtn.getAttribute('aria-pressed') === 'true';
+    // Check if shuffle is enabled
+    const shouldShuffle = document.getElementById('shuffle-checkbox').checked;
     if (shouldShuffle) {
         cards = shuffleArray(cards);
     }
@@ -192,48 +191,17 @@ function toggleTheme() {
 
 function copyText() {
     const textarea = document.getElementById('card-input');
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(textarea.value).catch(err => {
-            console.error('clipboard write failed', err);
-        });
-    } else {
-        textarea.select();
-        document.execCommand('copy');
-    }
+    textarea.select();
+    document.execCommand('copy');
 }
 
 function pasteText() {
-    if (navigator.clipboard && navigator.clipboard.readText) {
-        navigator.clipboard.readText().then(text => {
-            document.getElementById('card-input').value = text;
-        }).catch(err => {
-            console.error('failed to paste:', err);
-        });
-    } else {
-        alert('paste not supported in this browser');
-    }
+    navigator.clipboard.readText().then(text => {
+        document.getElementById('card-input').value = text;
+    }).catch(err => {
+        console.error('failed to paste:', err);
+    });
 }
-
-// Wire up shuffle button behavior
-document.addEventListener('DOMContentLoaded', () => {
-    const shuffleBtn = document.getElementById('shuffle-button');
-    if (shuffleBtn) {
-        shuffleBtn.addEventListener('click', () => {
-            const pressed = shuffleBtn.getAttribute('aria-pressed') === 'true';
-            shuffleBtn.setAttribute('aria-pressed', String(!pressed));
-        });
-    }
-
-    // Allow clicking question to flip
-    const questionEl = document.getElementById('card-question');
-    if (questionEl) {
-        questionEl.addEventListener('click', () => {
-            if (document.getElementById('study-screen').style.display !== 'none') {
-                flipCard();
-            }
-        });
-    }
-});
 
 // Keyboard controls
 document.addEventListener('keydown', (e) => {
