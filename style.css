@@ -13,7 +13,7 @@ body {
     justify-content: center;
     align-items: center;
     padding: 20px;
-    transition: background 0.3s, color 0.3s;
+    transition: all 0.3s ease;
 }
 
 body.dark-mode {
@@ -26,6 +26,7 @@ body.dark-mode button {
     background: #2a2a2a;
     color: #e0e0e0;
     border-color: #444;
+    transition: all 0.3s ease;
 }
 
 body.dark-mode button:hover {
@@ -35,6 +36,16 @@ body.dark-mode button:hover {
 
 body.dark-mode .card-back {
     border-top-color: #444;
+}
+
+body.dark-mode .stats {
+    color: #999;
+}
+
+body.dark-mode .theme-toggle {
+    background: #2a2a2a;
+    color: #e0e0e0;
+    border-color: #444;
 }
 
 .container {
@@ -93,10 +104,13 @@ button:active {
     justify-content: center;
     align-items: center;
     padding: 40px;
-    font-size: 24px;
+    font-size: 32px;
     line-height: 1.6;
     white-space: pre-wrap;
     cursor: pointer;
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
 }
 
 .card-front {
@@ -157,6 +171,15 @@ h1 {
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: all 0.3s ease;
+    background: white;
+    color: black;
+    border: 1px solid black;
+    cursor: pointer;
+}
+
+.theme-toggle:hover {
+    transform: scale(1.1);
 }
 
 label {

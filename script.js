@@ -171,13 +171,16 @@ function handleAgain() {
 
 function showComplete() {
     const studyScreen = document.getElementById('study-screen');
-    studyScreen.innerHTML = `
-        <div class="complete-screen">
-            <h1>session complete</h1>
-            <p>all cards reviewed.</p>
+    const content = `
+        <div class="stats">session complete</div>
+        <div class="card">
+            <div class="card-front">all cards reviewed</div>
+        </div>
+        <div class="controls">
             <button onclick="location.reload()">start over</button>
         </div>
     `;
+    studyScreen.innerHTML = content;
 }
 
 function openEdit() {
