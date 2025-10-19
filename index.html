@@ -25,8 +25,17 @@
     <script>
         // Apply theme immediately, before any rendering
         (function() {
-            if (localStorage.getItem('darkMode') === 'true') {
+            // Default to dark mode if no preference is saved
+            const savedDarkMode = localStorage.getItem('darkMode');
+            const isDarkMode = savedDarkMode === null ? true : savedDarkMode === 'true';
+            
+            if (isDarkMode) {
                 document.documentElement.classList.add('dark-mode');
+            }
+            
+            // Save default if no preference exists
+            if (savedDarkMode === null) {
+                localStorage.setItem('darkMode', 'true');
             }
         })();
     </script>

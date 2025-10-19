@@ -253,11 +253,18 @@ function pasteText() {
 
 // Initialize when the page loads
 document.addEventListener('DOMContentLoaded', () => {
-    // Sync dark mode with html element
-    const darkMode = localStorage.getItem('darkMode') === 'true';
-    if (darkMode) {
+    // Sync dark mode with html element - default to dark mode
+    const savedDarkMode = localStorage.getItem('darkMode');
+    const isDarkMode = savedDarkMode === null ? true : savedDarkMode === 'true';
+    
+    if (isDarkMode) {
         document.body.classList.add('dark-mode');
         document.documentElement.classList.add('dark-mode');
+    }
+    
+    // Save default if no preference exists
+    if (savedDarkMode === null) {
+        localStorage.setItem('darkMode', 'true');
     }
 
     // Setup keyboard controls
