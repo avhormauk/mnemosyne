@@ -4,10 +4,9 @@
     box-sizing: border-box;
 }
 
-body {
+body,
+html.dark-mode body {
     font-family: Helvetica, Arial, sans-serif;
-    background: white;
-    color: black;
     min-height: 100vh;
     display: flex;
     justify-content: center;
@@ -17,7 +16,13 @@ body {
     overflow: hidden;
 }
 
-body.dark-mode {
+body {
+    background: white;
+    color: black;
+}
+
+body.dark-mode,
+html.dark-mode body {
     background: #1a1a1a;
     color: #e0e0e0;
 }

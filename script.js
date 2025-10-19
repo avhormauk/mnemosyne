@@ -186,6 +186,18 @@ function showComplete() {
     studyScreen.innerHTML = content;
 }
 
+function navigateBack() {
+    if (deck.length === 0) return;
+    currentIndex = (currentIndex - 1 + deck.length) % deck.length;
+    showCard();
+}
+
+function navigateForward() {
+    if (deck.length === 0) return;
+    currentIndex = (currentIndex + 1) % deck.length;
+    showCard();
+}
+
 function openEdit() {
     document.getElementById('study-screen').style.display = 'none';
     document.getElementById('input-screen').style.display = 'block';
@@ -193,15 +205,14 @@ function openEdit() {
 
 function toggleTheme() {
     const isDarkMode = !document.body.classList.contains('dark-mode');
-    if (isDarkMode) {
-        document.body.classList.add('dark-mode');
-    } else {
-        document.body.classList.remove('dark-mode');
-    }
+    document.body.classList.toggle('dark-mode', isDarkMode);
+    document.documentElement.classList.toggle('dark-mode', isDarkMode);
     localStorage.setItem('darkMode', isDarkMode);
 }
 
 function restartSession() {
+    // Preserve dark mode state
+    const darkMode = localStorage.getItem('darkMode') === 'true';
     location.reload();
 }
 
@@ -236,10 +247,11 @@ function pasteText() {
 
 // Initialize when the page loads
 document.addEventListener('DOMContentLoaded', () => {
-    // Load dark mode preference
+    // Sync dark mode with html element
     const darkMode = localStorage.getItem('darkMode') === 'true';
     if (darkMode) {
         document.body.classList.add('dark-mode');
+        document.documentElement.classList.add('dark-mode');
     }
 
     // Setup keyboard controls
@@ -265,6 +277,15 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (e.key === '3') {
                 e.preventDefault();
                 handleEasy();
+            }
+        } else if (!isFlipped && deck.length > 0) {
+            // Arrow key navigation when card is not flipped
+            if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                navigateBack();
+            } else if (e.key === 'ArrowRight') {
+                e.preventDefault();
+                navigateForward();
             }
         }
     });

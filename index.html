@@ -4,11 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>mnemosyne</title>
-    <script>
-        // Apply theme immediately if saved
-        if (localStorage.getItem('darkMode') === 'true') {
-            document.body.classList.add('dark-mode');
+    <style>
+        /* Prevent flash by setting dark mode immediately */
+        body.dark-mode {
+            background: #1a1a1a !important;
+            color: #e0e0e0 !important;
         }
+    </style>
+    <script>
+        // Apply theme immediately, before any rendering
+        (function() {
+            if (localStorage.getItem('darkMode') === 'true') {
+                document.documentElement.classList.add('dark-mode');
+            }
+        })();
     </script>
     <link rel="stylesheet" href="style.css">
 </head>
