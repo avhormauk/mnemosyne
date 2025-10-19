@@ -7,27 +7,35 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <button class="theme-toggle" onclick="toggleTheme()">◐</button>
+    <div class="fixed-controls">
+        <button class="theme-toggle" onclick="toggleTheme()">◐</button>
+        <button class="help-toggle" onclick="toggleHelp()">?</button>
+    </div>
     
     <div class="container">
         <div id="input-screen">
-            <h1>mnemosyne</h1>
-            <textarea id="card-input" placeholder="paste your flashcards here...
-
-##l1
-**what is a signal?
-//a signal is a function that conveys information...
-**what is a system?
-//a system is an operator that maps..."></textarea>
-            <label>
-                <input type="checkbox" id="shuffle-checkbox"> shuffle cards
-            </label>
+            <h1 class="title">mnemosyne</h1>
+            <textarea id="card-input" placeholder="paste your flashcards here..."></textarea>
+            <button id="shuffle-button" class="shuffle-button" aria-pressed="false">shuffle</button>
             <button onclick="startStudying()">start studying</button>
+        </div>
+        
+        <div id="help-modal" class="help-modal">
+            <div class="help-content">
+                <h2>Flashcard Format:</h2>
+                <pre>
+##section-name
+**question text here?
+//answer text here...
+**another question?
+//another answer...</pre>
+                <button onclick="toggleHelp()">close</button>
+            </div>
         </div>
 
         <div id="study-screen">
             <div class="stats" id="stats"></div>
-            <div class="card" onclick="flipCard()">
+            <div class="card-container" onclick="flipCard()">
                 <div class="card-front" id="card-question"></div>
                 <div class="card-back" id="card-answer"></div>
             </div>

@@ -62,6 +62,11 @@ function shuffleArray(array) {
     return shuffled;
 }
 
+function toggleHelp() {
+    const modal = document.getElementById('help-modal');
+    modal.classList.toggle('visible');
+}
+
 function startStudying() {
     const input = document.getElementById('card-input').value;
     let cards = parseFlashcards(input);
@@ -72,7 +77,7 @@ function startStudying() {
     }
 
     // Check if shuffle is enabled
-    const shouldShuffle = document.getElementById('shuffle-checkbox').checked;
+    const shouldShuffle = document.getElementById('shuffle-button').getAttribute('aria-pressed') === 'true';
     if (shouldShuffle) {
         cards = shuffleArray(cards);
     }
@@ -205,6 +210,17 @@ function pasteText() {
         console.error('failed to paste:', err);
     });
 }
+
+// Initialize shuffle button
+document.addEventListener('DOMContentLoaded', () => {
+    const shuffleBtn = document.getElementById('shuffle-button');
+    if (shuffleBtn) {
+        shuffleBtn.addEventListener('click', () => {
+            const pressed = shuffleBtn.getAttribute('aria-pressed') === 'true';
+            shuffleBtn.setAttribute('aria-pressed', (!pressed).toString());
+        });
+    }
+});
 
 // Keyboard controls
 document.addEventListener('keydown', (e) => {
