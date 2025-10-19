@@ -94,7 +94,7 @@ function startStudying() {
 
 function updateStats() {
     const stats = document.getElementById('stats');
-    stats.innerHTML = `${deck.length} remaining, ${completedCount} completed, ${againCount} again, ${hardCount} hard`;
+    stats.textContent = deck.length;
 }
 
 function showCard() {
@@ -204,9 +204,10 @@ function loadThemePreference() {
 }
 
 function restartSession() {
-    // Save current theme state
+    // Preserve the current page state while reloading
     const isDarkMode = document.body.classList.contains('dark-mode');
-    location.reload();
+    localStorage.setItem('darkMode', isDarkMode);
+    window.location.href = window.location.href;
 }
 
 // Load theme preference when page loads

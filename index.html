@@ -6,10 +6,17 @@
     <title>mnemosyne</title>
     <script>
         // Prevent flash by applying theme immediately
-        if (localStorage.getItem('darkMode') === 'true') {
+        const darkMode = localStorage.getItem('darkMode') === 'true';
+        if (darkMode) {
             document.documentElement.classList.add('dark-mode');
+            document.body.classList.add('dark-mode');
         }
     </script>
+    <style>
+        html.dark-mode, html.dark-mode body {
+            background: #1a1a1a;
+        }
+    </style>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
