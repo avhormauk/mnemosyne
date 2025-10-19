@@ -12,7 +12,7 @@ html.dark-mode body {
     justify-content: center;
     align-items: center;
     padding: 20px;
-    transition: all 0.3s ease;
+    transition: background 0.3s ease, color 0.3s ease;
     overflow: hidden;
 }
 
@@ -94,6 +94,8 @@ textarea {
     border: 1px solid black;
     resize: none;
     overflow-y: auto;
+    transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    spellcheck: false;
 }
 
 textarea:focus {
@@ -109,7 +111,7 @@ button {
     color: black;
     border: 1px solid black;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease, transform 0.2s;
 }
 
 button:hover {
@@ -183,14 +185,17 @@ button:active {
     color: white;
 }
 
-body.dark-mode .shuffle-button {
+body.dark-mode .shuffle-button,
+html.dark-mode .shuffle-button {
     background: #2a2a2a;
     color: #e0e0e0;
     border-color: #444;
 }
 
 body.dark-mode .shuffle-button.active,
-body.dark-mode .shuffle-button[aria-pressed="true"] {
+body.dark-mode .shuffle-button[aria-pressed="true"],
+html.dark-mode .shuffle-button.active,
+html.dark-mode .shuffle-button[aria-pressed="true"] {
     background: #e0e0e0;
     color: #1a1a1a;
 }
@@ -238,6 +243,11 @@ h1 {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    z-index: 100;
+}
+
+.fixed-controls.hidden {
+    display: none;
 }
 
 .theme-toggle,
@@ -330,4 +340,63 @@ label {
 
 body.dark-mode .stats {
     color: #999;
+}
+
+.hint-text {
+    position: fixed;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 14px;
+    color: #999;
+    text-align: center;
+    opacity: 0.7;
+}
+
+body.dark-mode .hint-text {
+    color: #666;
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+    .card-container {
+        font-size: 24px;
+        padding: 0 20px;
+        top: 60px;
+        bottom: 120px;
+    }
+    
+    .card-front {
+        margin-top: 20px;
+    }
+    
+    .controls {
+        bottom: 20px;
+        padding: 0 10px;
+    }
+    
+    button {
+        font-size: 14px;
+        padding: 10px 16px;
+        margin: 5px 3px;
+    }
+    
+    .hint-text {
+        font-size: 12px;
+        bottom: 100px;
+    }
+    
+    .stats {
+        font-size: 20px;
+        top: 20px;
+    }
+    
+    textarea {
+        min-height: 300px;
+        font-size: 14px;
+    }
+    
+    .key-hint {
+        display: none;
+    }
 }

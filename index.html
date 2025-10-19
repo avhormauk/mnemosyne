@@ -41,7 +41,7 @@
     <div class="container">
         <div id="input-screen">
             <h1 class="title">mnemosyne</h1>
-            <textarea id="card-input" placeholder="paste your flashcards here..."></textarea>
+            <textarea id="card-input" placeholder="paste your flashcards here..." spellcheck="false"></textarea>
             <button id="shuffle-button" class="shuffle-button" onclick="toggleShuffle()" aria-pressed="false">shuffle</button>
             <button onclick="startStudying()">start studying</button>
         </div>
@@ -61,6 +61,7 @@
 
         <div id="study-screen">
             <div class="stats" id="stats"></div>
+            <div class="hint-text" id="hint-text">space/click to flip • ← → to navigate</div>
             <div class="card-container" onclick="flipCard()">
                 <div class="card-front" id="card-question"></div>
                 <div class="card-back" id="card-answer"></div>

@@ -92,6 +92,7 @@ function startStudying() {
     deck = cards;
     document.getElementById('input-screen').style.display = 'none';
     document.getElementById('study-screen').style.display = 'block';
+    document.querySelector('.fixed-controls').classList.add('hidden');
     currentIndex = 0;
     completedCount = 0;
     againCount = 0;
@@ -115,11 +116,13 @@ function showCard() {
     const questionEl = document.getElementById('card-question');
     const answerEl = document.getElementById('card-answer');
     const controls = document.getElementById('controls');
+    const hintText = document.getElementById('hint-text');
 
     questionEl.textContent = card.front;
     answerEl.textContent = '';
     answerEl.classList.remove('visible');
     controls.style.display = 'none';
+    if (hintText) hintText.style.display = 'block';
     
     updateStats();
 }
@@ -131,10 +134,12 @@ function flipCard() {
     const card = deck[currentIndex];
     const answerEl = document.getElementById('card-answer');
     const controls = document.getElementById('controls');
+    const hintText = document.getElementById('hint-text');
 
     answerEl.textContent = card.back;
     answerEl.classList.add('visible');
     controls.style.display = 'flex';
+    if (hintText) hintText.style.display = 'none';
 }
 
 function handleEasy() {
@@ -201,6 +206,7 @@ function navigateForward() {
 function openEdit() {
     document.getElementById('study-screen').style.display = 'none';
     document.getElementById('input-screen').style.display = 'block';
+    document.querySelector('.fixed-controls').classList.remove('hidden');
 }
 
 function toggleTheme() {
