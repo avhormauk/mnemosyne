@@ -41,8 +41,10 @@ html.dark-mode button {
 
 body.dark-mode button:hover,
 html.dark-mode button:hover {
-    background: #444;
-    color: white;
+    background: white;
+    color: #0d0d0d;
+    border-color: white;
+    transform: scale(1.03);
 }
 
 body.dark-mode .shuffle-button[aria-pressed="true"],
@@ -88,6 +90,7 @@ html.dark-mode .help-toggle:hover {
     width: 100%;
     max-width: 800px;
     margin: 0 auto;
+    gap: 30px;
 }
 
 #study-screen {
@@ -144,6 +147,7 @@ button:hover {
     color: white;
     border-color: #1a1a1a;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transform: scale(1.03);
 }
 
 button:active {

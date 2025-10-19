@@ -269,8 +269,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Setup keyboard controls
     document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            const helpModal = document.getElementById('help-modal');
+            if (helpModal.classList.contains('visible')) {
+                toggleHelp();
+                return;
+            }
+            const studyScreen = document.getElementById('study-screen');
+            if (getComputedStyle(studyScreen).display === 'block') {
+                openEdit();
+                return;
+            }
+        }
+
         const studyScreen = document.getElementById('study-screen');
-        // Only process keyboard events if study screen is visible
+        // Only process other keyboard events if study screen is visible
         if (getComputedStyle(studyScreen).display === 'none') return;
         
         if (e.code === 'Space') {
