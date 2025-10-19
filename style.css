@@ -90,7 +90,6 @@ html.dark-mode .help-toggle:hover {
     width: 100%;
     max-width: 800px;
     margin: 0 auto;
-    gap: 30px;
 }
 
 #study-screen {
@@ -111,8 +110,8 @@ textarea {
     resize: none;
     overflow-y: auto;
     transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-    spellcheck: false;
     background: white;
+    margin-bottom: 20px;
 }
 
 textarea:focus {
@@ -226,7 +225,7 @@ button:active {
 
 .shuffle-button {
     display: block;
-    margin: 20px auto;
+    margin: 0 auto 15px;
     padding: 11px 28px;
     background: white;
     color: #1a1a1a;
@@ -273,6 +272,11 @@ html.dark-mode .shuffle-button[aria-pressed="true"] {
     background: #e8e8e8;
     color: #0d0d0d;
     border-color: #e8e8e8;
+}
+
+.start-button {
+    display: block;
+    margin: 0 auto;
 }
 
 .card-back.visible {
