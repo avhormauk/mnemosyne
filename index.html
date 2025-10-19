@@ -4,15 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>mnemosyne</title>
-    
-    <!-- Apply saved theme immediately to avoid flash -->
     <script>
-        const savedTheme = localStorage.getItem('darkMode');
-        if (savedTheme === 'true') {
-            document.documentElement.classList.add('dark-mode');
+        // Apply theme immediately if saved
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('dark-mode');
         }
     </script>
-
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -34,7 +31,7 @@
                 <div class="help-title">flashcard format:</div>
                 <pre>
 ##section-name
-**question text here? 
+**question text here?
 //answer text here...
 **another question?
 //another answer...</pre>
