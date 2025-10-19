@@ -94,9 +94,7 @@ function startStudying() {
 
 function updateStats() {
     const stats = document.getElementById('stats');
-    stats.innerHTML = `
-        ${deck.length} remaining • ${completedCount} completed • ${againCount} again • ${hardCount} hard
-    `;
+    stats.innerHTML = `${deck.length} remaining, ${completedCount} completed, ${againCount} again, ${hardCount} hard`;
 }
 
 function showCard() {
