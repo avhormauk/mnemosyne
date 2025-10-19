@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>mnemosyne</title>
+    <script>
+        // Prevent flash by applying theme immediately
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.documentElement.classList.add('dark-mode');
+        }
+    </script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -22,7 +28,7 @@
         
         <div id="help-modal" class="help-modal">
             <div class="help-content">
-                <h2>Flashcard Format:</h2>
+                <div class="help-title">Flashcard Format:</div>
                 <pre>
 ##section-name
 **question text here?

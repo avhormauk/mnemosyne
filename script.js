@@ -175,7 +175,7 @@ function handleAgain() {
 function showComplete() {
     const studyScreen = document.getElementById('study-screen');
     const content = `
-        <div class="card-container">
+        <div class="card-container completion">
             <div class="card-front">all cards reviewed</div>
         </div>
         <div class="controls">
