@@ -175,12 +175,11 @@ function handleAgain() {
 function showComplete() {
     const studyScreen = document.getElementById('study-screen');
     const content = `
-        <div class="stats">session complete</div>
-        <div class="card">
+        <div class="card-container">
             <div class="card-front">all cards reviewed</div>
         </div>
         <div class="controls">
-            <button onclick="location.reload()">start over</button>
+            <button onclick="restartSession()">start over</button>
         </div>
     `;
     studyScreen.innerHTML = content;
@@ -193,7 +192,25 @@ function openEdit() {
 
 function toggleTheme() {
     document.body.classList.toggle('dark-mode');
+    // Save theme preference
+    localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
 }
+
+function loadThemePreference() {
+    const darkMode = localStorage.getItem('darkMode') === 'true';
+    if (darkMode) {
+        document.body.classList.add('dark-mode');
+    }
+}
+
+function restartSession() {
+    // Save current theme state
+    const isDarkMode = document.body.classList.contains('dark-mode');
+    location.reload();
+}
+
+// Load theme preference when page loads
+document.addEventListener('DOMContentLoaded', loadThemePreference);
 
 function copyText() {
     const textarea = document.getElementById('card-input');
