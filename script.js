@@ -220,25 +220,52 @@ function openEdit() {
     document.querySelector('.fixed-controls').classList.remove('hidden');
 }
 
-function toggleCardEdit() {
+function startCardEdit() {
     if (!isFlipped) return; // Only allow editing when card is flipped
 
     const questionEl = document.getElementById('card-question');
     const answerEl = document.getElementById('card-answer');
-    const isEditing = questionEl.getAttribute('contenteditable') === 'true';
-
-    if (isEditing) {
-        // Save changes
-        questionEl.setAttribute('contenteditable', 'false');
-        answerEl.setAttribute('contenteditable', 'false');
-        deck[currentIndex].front = questionEl.textContent.trim();
-        deck[currentIndex].back = answerEl.textContent.trim();
-    } else {
-        // Enable editing
-        questionEl.setAttribute('contenteditable', 'true');
-        answerEl.setAttribute('contenteditable', 'true');
-        questionEl.focus();
+    
+    // Enable editing
+    questionEl.setAttribute('contenteditable', 'true');
+    answerEl.setAttribute('contenteditable', 'true');
+    questionEl.focus();
+    
+    // Add event listeners for Ctrl+Enter
+    function handleSave(e) {
+        if (e.ctrlKey && e.key === 'Enter') {
+            e.preventDefault();
+            saveCardEdits();
+        }
     }
+    
+    questionEl.addEventListener('keydown', handleSave);
+    answerEl.addEventListener('keydown', handleSave);
+}
+
+function saveCardEdits() {
+    const questionEl = document.getElementById('card-question');
+    const answerEl = document.getElementById('card-answer');
+    
+    // Save changes
+    questionEl.setAttribute('contenteditable', 'false');
+    answerEl.setAttribute('contenteditable', 'false');
+    
+    // Update the current card
+    deck[currentIndex].front = questionEl.textContent.trim();
+    deck[currentIndex].back = answerEl.textContent.trim();
+    
+    // Update the input textarea immediately
+    const textarea = document.getElementById('card-input');
+    let content = '';
+    deck.forEach(card => {
+        content += `**${card.front}\n//${card.back}\n\n`;
+    });
+    textarea.value = content.trim();
+    
+    // Remove event listeners (they'll be added again when editing starts)
+    questionEl.removeEventListener('keydown', handleSave);
+    answerEl.removeEventListener('keydown', handleSave);
 }
 
 function toggleTheme() {
@@ -335,9 +362,9 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (e.key === '3') {
                 e.preventDefault();
                 handleEasy();
-            } else if (e.key.toLowerCase() === 'e') {
+            } else if (e.key.toLowerCase() === 'e' && !e.ctrlKey && !e.metaKey) {
                 e.preventDefault();
-                toggleCardEdit();
+                startCardEdit();
             }
         } else if (!isFlipped && deck.length > 0) {
             // Arrow key navigation when card is not flipped
