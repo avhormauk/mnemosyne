@@ -56,11 +56,20 @@
         
         <div id="help-modal" class="help-modal">
             <div class="help-content">
-                <div class="help-title">flashcard format:</div>
-                <pre>
-##comment
-**question
-//answer</pre>
+                <div class="help-title">format:</div>
+                <pre>##comment
+**question text
+//answer text</pre>
+                
+                <div class="help-title">controls:</div>
+                <pre>space     flip card
+e         edit card
+ctrl+enter    save edits
+1         mark as 'again'
+2         mark as 'hard'
+3/space   mark as 'easy'
+
+esc       cancel edits/exit</pre>
                 <button onclick="toggleHelp()">close</button>
             </div>
         </div>
