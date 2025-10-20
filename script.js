@@ -220,6 +220,23 @@ function openEdit() {
     document.querySelector('.fixed-controls').classList.remove('hidden');
 }
 
+function cancelCardEdit() {
+    const questionEl = document.getElementById('card-question');
+    const answerEl = document.getElementById('card-answer');
+    
+    // Disable editing and revert to original content
+    questionEl.setAttribute('contenteditable', 'false');
+    answerEl.setAttribute('contenteditable', 'false');
+    
+    // Restore original content
+    questionEl.textContent = deck[currentIndex].front;
+    answerEl.textContent = deck[currentIndex].back;
+    
+    // Remove event listeners
+    questionEl.removeEventListener('keydown', handleKeyDown);
+    answerEl.removeEventListener('keydown', handleKeyDown);
+}
+
 function startCardEdit() {
     if (!isFlipped) return; // Only allow editing when card is flipped
 
@@ -231,16 +248,30 @@ function startCardEdit() {
     answerEl.setAttribute('contenteditable', 'true');
     questionEl.focus();
     
-    // Add event listeners for Ctrl+Enter
-    function handleSave(e) {
-        if (e.ctrlKey && e.key === 'Enter') {
-            e.preventDefault();
-            saveCardEdits();
-        }
+    // Add event listeners for all key handling
+    questionEl.addEventListener('keydown', handleKeyDown);
+    answerEl.addEventListener('keydown', handleKeyDown);
+}
+
+function handleKeyDown(e) {
+    // Allow normal typing of 'e' and space
+    if (!e.ctrlKey && !e.metaKey && (e.key === 'e' || e.code === 'Space')) {
+        return true;
     }
     
-    questionEl.addEventListener('keydown', handleSave);
-    answerEl.addEventListener('keydown', handleSave);
+    // Handle Ctrl+Enter for save
+    if (e.ctrlKey && e.key === 'Enter') {
+        e.preventDefault();
+        saveCardEdits();
+        return;
+    }
+    
+    // Handle Escape to cancel edit
+    if (e.key === 'Escape') {
+        e.preventDefault();
+        cancelCardEdit();
+        return;
+    }
 }
 
 function saveCardEdits() {
@@ -263,9 +294,9 @@ function saveCardEdits() {
     });
     textarea.value = content.trim();
     
-    // Remove event listeners (they'll be added again when editing starts)
-    questionEl.removeEventListener('keydown', handleSave);
-    answerEl.removeEventListener('keydown', handleSave);
+    // Remove event listeners
+    questionEl.removeEventListener('keydown', handleKeyDown);
+    answerEl.removeEventListener('keydown', handleKeyDown);
 }
 
 function toggleTheme() {
@@ -334,6 +365,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 toggleHelp();
                 return;
             }
+            
+            // Check if we're in edit mode
+            const questionEl = document.getElementById('card-question');
+            if (questionEl && questionEl.getAttribute('contenteditable') === 'true') {
+                return; // Let the edit mode handler deal with Escape
+            }
+            
             const studyScreen = document.getElementById('study-screen');
             if (getComputedStyle(studyScreen).display === 'block') {
                 openEdit();
