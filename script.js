@@ -378,6 +378,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Setup keyboard controls
     document.addEventListener('keydown', (e) => {
+        // Handle Ctrl+Enter on input screen
+        if (e.ctrlKey && e.key === 'Enter') {
+            const studyScreen = document.getElementById('study-screen');
+            if (getComputedStyle(studyScreen).display === 'none') {
+                e.preventDefault();
+                startStudying();
+                return;
+            }
+        }
+
         // First check if we're in edit mode
         if (isEditing) {
             handleCardKeyEvents(e);
@@ -402,16 +412,19 @@ document.addEventListener('DOMContentLoaded', () => {
         // Only process other keyboard events if study screen is visible
         if (getComputedStyle(studyScreen).display === 'none') return;
         
+        // Handle spacebar
         if (e.code === 'Space') {
             e.preventDefault();
             if (deck.length === 0) {
                 restartSession();
             } else if (!isFlipped) {
                 flipCard();
-            } else {
+            } else if (isFlipped) {
                 handleEasy(); // Space triggers "easy" when card is flipped
             }
-        } else if (isFlipped && deck.length > 0) {
+        } 
+        // Handle number keys when card is flipped
+        else if (isFlipped && deck.length > 0) {
             if (e.key === '1') {
                 e.preventDefault();
                 handleAgain();
