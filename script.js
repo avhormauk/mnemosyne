@@ -408,6 +408,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 restartSession();
             } else if (!isFlipped) {
                 flipCard();
+            } else {
+                handleEasy(); // Space triggers "easy" when card is flipped
             }
         } else if (isFlipped && deck.length > 0) {
             if (e.key === '1') {
