@@ -130,7 +130,7 @@ function showCard() {
 }
 
 function flipCard() {
-    if (isFlipped) return;
+    if (isFlipped || isEditing) return;
 
     isFlipped = true;
     const card = deck[currentIndex];
@@ -223,6 +223,7 @@ function openEdit() {
 function cancelCardEdit() {
     const questionEl = document.getElementById('card-question');
     const answerEl = document.getElementById('card-answer');
+    const cardContainer = document.querySelector('.card-container');
     
     // Disable editing and revert to original content
     questionEl.setAttribute('contenteditable', 'false');
@@ -232,51 +233,67 @@ function cancelCardEdit() {
     questionEl.textContent = deck[currentIndex].front;
     answerEl.textContent = deck[currentIndex].back;
     
-    // Remove event listeners
-    questionEl.removeEventListener('keydown', handleKeyDown);
-    answerEl.removeEventListener('keydown', handleKeyDown);
+    // Restore click-to-flip
+    cardContainer.onclick = () => flipCard();
+    
+    // Exit edit mode
+    isEditing = false;
 }
+
+// Global state for edit mode
+let isEditing = false;
 
 function startCardEdit() {
     if (!isFlipped) return; // Only allow editing when card is flipped
-
+    
+    isEditing = true;
     const questionEl = document.getElementById('card-question');
     const answerEl = document.getElementById('card-answer');
+    const cardContainer = document.querySelector('.card-container');
+    
+    // Disable click-to-flip while editing
+    cardContainer.onclick = null;
     
     // Enable editing
     questionEl.setAttribute('contenteditable', 'true');
     answerEl.setAttribute('contenteditable', 'true');
     questionEl.focus();
-    
-    // Add event listeners for all key handling
-    questionEl.addEventListener('keydown', handleKeyDown);
-    answerEl.addEventListener('keydown', handleKeyDown);
 }
 
-function handleKeyDown(e) {
-    // Allow normal typing of 'e' and space
-    if (!e.ctrlKey && !e.metaKey && (e.key === 'e' || e.code === 'Space')) {
-        return true;
-    }
+// Main keyboard event handler for edit mode
+function handleCardKeyEvents(e) {
+    // Only handle events when in edit mode
+    if (!isEditing) return;
+
+    const questionEl = document.getElementById('card-question');
+    const answerEl = document.getElementById('card-answer');
     
-    // Handle Ctrl+Enter for save
+    // Save on Ctrl+Enter
     if (e.ctrlKey && e.key === 'Enter') {
         e.preventDefault();
         saveCardEdits();
         return;
     }
     
-    // Handle Escape to cancel edit
+    // Cancel edit on Escape
     if (e.key === 'Escape') {
         e.preventDefault();
+        e.stopPropagation(); // Prevent main Escape handler
         cancelCardEdit();
         return;
+    }
+    
+    // Allow normal typing including space and 'e'
+    if (e.code === 'Space') {
+        // Only prevent space from triggering flip
+        e.stopPropagation();
     }
 }
 
 function saveCardEdits() {
     const questionEl = document.getElementById('card-question');
     const answerEl = document.getElementById('card-answer');
+    const cardContainer = document.querySelector('.card-container');
     
     // Save changes
     questionEl.setAttribute('contenteditable', 'false');
@@ -294,9 +311,11 @@ function saveCardEdits() {
     });
     textarea.value = content.trim();
     
-    // Remove event listeners
-    questionEl.removeEventListener('keydown', handleKeyDown);
-    answerEl.removeEventListener('keydown', handleKeyDown);
+    // Restore click-to-flip
+    cardContainer.onclick = () => flipCard();
+    
+    // Exit edit mode
+    isEditing = false;
 }
 
 function toggleTheme() {
@@ -359,17 +378,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Setup keyboard controls
     document.addEventListener('keydown', (e) => {
+        // First check if we're in edit mode
+        if (isEditing) {
+            handleCardKeyEvents(e);
+            return;
+        }
+
         if (e.key === 'Escape') {
             const helpModal = document.getElementById('help-modal');
             if (helpModal.classList.contains('visible')) {
                 toggleHelp();
                 return;
-            }
-            
-            // Check if we're in edit mode
-            const questionEl = document.getElementById('card-question');
-            if (questionEl && questionEl.getAttribute('contenteditable') === 'true') {
-                return; // Let the edit mode handler deal with Escape
             }
             
             const studyScreen = document.getElementById('study-screen');
@@ -412,6 +431,9 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (e.key === 'ArrowRight') {
                 e.preventDefault();
                 navigateForward();
+            } else if (e.key.toLowerCase() === 'e' && isFlipped) {
+                e.preventDefault();
+                startCardEdit();
             }
         }
     });
