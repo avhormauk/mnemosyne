@@ -119,7 +119,9 @@ function showCard() {
     const hintText = document.getElementById('hint-text');
 
     questionEl.textContent = card.front;
+    questionEl.setAttribute('contenteditable', 'false');
     answerEl.textContent = '';
+    answerEl.setAttribute('contenteditable', 'false');
     answerEl.classList.remove('visible');
     controls.style.display = 'none';
     if (hintText) hintText.style.display = 'block';
@@ -204,9 +206,39 @@ function navigateForward() {
 }
 
 function openEdit() {
+    // Update textarea with any edited cards before switching views
+    if (deck.length > 0) {
+        const textarea = document.getElementById('card-input');
+        let content = '';
+        deck.forEach(card => {
+            content += `**${card.front}\n//${card.back}\n\n`;
+        });
+        textarea.value = content.trim();
+    }
     document.getElementById('study-screen').style.display = 'none';
     document.getElementById('input-screen').style.display = 'block';
     document.querySelector('.fixed-controls').classList.remove('hidden');
+}
+
+function toggleCardEdit() {
+    if (!isFlipped) return; // Only allow editing when card is flipped
+
+    const questionEl = document.getElementById('card-question');
+    const answerEl = document.getElementById('card-answer');
+    const isEditing = questionEl.getAttribute('contenteditable') === 'true';
+
+    if (isEditing) {
+        // Save changes
+        questionEl.setAttribute('contenteditable', 'false');
+        answerEl.setAttribute('contenteditable', 'false');
+        deck[currentIndex].front = questionEl.textContent.trim();
+        deck[currentIndex].back = answerEl.textContent.trim();
+    } else {
+        // Enable editing
+        questionEl.setAttribute('contenteditable', 'true');
+        answerEl.setAttribute('contenteditable', 'true');
+        questionEl.focus();
+    }
 }
 
 function toggleTheme() {
@@ -303,6 +335,9 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (e.key === '3') {
                 e.preventDefault();
                 handleEasy();
+            } else if (e.key.toLowerCase() === 'e') {
+                e.preventDefault();
+                toggleCardEdit();
             }
         } else if (!isFlipped && deck.length > 0) {
             // Arrow key navigation when card is not flipped
