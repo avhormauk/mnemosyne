@@ -378,16 +378,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Setup keyboard controls
     document.addEventListener('keydown', (e) => {
-        // Handle Ctrl+Enter on input screen
-        if (e.ctrlKey && e.key === 'Enter') {
-            const studyScreen = document.getElementById('study-screen');
-            if (getComputedStyle(studyScreen).display === 'none') {
-                e.preventDefault();
-                startStudying();
-                return;
-            }
-        }
-
         // First check if we're in edit mode
         if (isEditing) {
             handleCardKeyEvents(e);
@@ -419,11 +409,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 restartSession();
             } else if (!isFlipped) {
                 flipCard();
-            } else if (isFlipped) {
+            } else {
                 handleEasy(); // Space triggers "easy" when card is flipped
             }
         } 
-        // Handle number keys when card is flipped
+        // Handle keys when card is flipped
         else if (isFlipped && deck.length > 0) {
             if (e.key === '1') {
                 e.preventDefault();
@@ -434,21 +424,19 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (e.key === '3') {
                 e.preventDefault();
                 handleEasy();
-            } else if (e.key.toLowerCase() === 'e' && !e.ctrlKey && !e.metaKey) {
+            } else if (e.key.toLowerCase() === 'e') {
                 e.preventDefault();
                 startCardEdit();
             }
-        } else if (!isFlipped && deck.length > 0) {
-            // Arrow key navigation when card is not flipped
+        } 
+        // Handle navigation when card is not flipped
+        else if (!isFlipped && deck.length > 0) {
             if (e.key === 'ArrowLeft') {
                 e.preventDefault();
                 navigateBack();
             } else if (e.key === 'ArrowRight') {
                 e.preventDefault();
                 navigateForward();
-            } else if (e.key.toLowerCase() === 'e' && isFlipped) {
-                e.preventDefault();
-                startCardEdit();
             }
         }
     });
