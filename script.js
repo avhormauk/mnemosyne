@@ -54,6 +54,12 @@ function parseFlashcards(text) {
         });
     }
 
+    // Update input screen card count
+    const inputStats = document.getElementById('input-stats');
+    if (inputStats) {
+        inputStats.textContent = cards.length;
+    }
+
     return cards;
 }
 
@@ -439,6 +445,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (savedDarkMode === null) {
         localStorage.setItem('darkMode', 'true');
     }
+
+    // Setup input text change handler for live card count
+    const textarea = document.getElementById('card-input');
+    textarea.addEventListener('input', () => {
+        parseFlashcards(textarea.value);
+    });
+    // Initial count
+    parseFlashcards(textarea.value);
 
     // Setup keyboard controls
     document.addEventListener('keydown', (e) => {
