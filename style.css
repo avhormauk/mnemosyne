@@ -233,8 +233,10 @@ body.dark-mode .card-back[contenteditable="true"] {
     font-weight: 400;
     opacity: 0;
     animation: fadeIn 0.3s ease forwards;
-    margin: auto auto;
-    flex: 1 1 auto;
+    margin: auto;
+    position: relative;
+    min-height: 0;
+    height: auto;
 }
 
 @keyframes fadeIn {
@@ -454,6 +456,7 @@ label {
     max-width: 800px;
     text-align: center;
     letter-spacing: -0.01em;
+    transition: opacity 0.2s ease;
 }
 
 body.dark-mode .stats {
@@ -471,10 +474,29 @@ body.dark-mode .stats {
     text-align: center;
     opacity: 0.6;
     letter-spacing: 0.01em;
+    transition: opacity 0.2s ease;
 }
 
 body.dark-mode .hint-text {
     color: #555;
+}
+
+/* Controls visibility but maintains functionality */
+.controls {
+    transition: opacity 0.2s ease;
+}
+
+.hud-hidden .stats,
+.hud-hidden .hint-text,
+.hud-hidden .controls:not(:hover) {
+    opacity: 0 !important;
+    pointer-events: none;
+}
+
+/* Restore pointer events when hovering over controls area to maintain functionality */
+.hud-hidden .controls:hover {
+    opacity: 1 !important;
+    pointer-events: auto;
 }
 
 /* Mobile optimizations */

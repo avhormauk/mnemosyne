@@ -243,11 +243,7 @@ function undoLastAction() {
 
 function toggleHud() {
     isHudHidden = !isHudHidden;
-    const stats = document.getElementById('stats');
-    const hintText = document.getElementById('hint-text');
-    
-    stats.style.opacity = isHudHidden ? '0' : '1';
-    if (hintText) hintText.style.opacity = isHudHidden ? '0' : '0.6';
+    document.getElementById('study-screen').classList.toggle('hud-hidden', isHudHidden);
 }
 
 function showComplete() {
