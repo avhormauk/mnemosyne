@@ -350,6 +350,7 @@ h1 {
     flex-direction: column;
     gap: 10px;
     z-index: 100;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
 }
 
 .fixed-controls.hidden {
@@ -371,6 +372,8 @@ h1 {
     border: 1px solid #e0e0e0;
     cursor: pointer;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    opacity: 1;
+    visibility: visible;
 }
 
 .help-toggle:hover {
@@ -486,28 +489,37 @@ body.dark-mode .hint-text {
     transition: opacity 0.2s ease;
 }
 
-.fixed-controls,
+/* Base transitions for all HUD elements */
 .stats,
 .hint-text,
-.controls {
-    transition: opacity 0.2s ease;
+.controls,
+.help-toggle,
+.fixed-controls {
+    transition: opacity 0.2s ease, visibility 0.2s ease;
 }
 
-.hud-hidden .stats,
-.hud-hidden #stats,
-.hud-hidden .hint-text,
-.hud-hidden .controls:not(:hover),
-.hud-hidden .fixed-controls {
+/* Hide all HUD elements when HUD is hidden */
+#study-screen.hud-hidden .stats,
+#study-screen.hud-hidden #stats,
+#study-screen.hud-hidden .hint-text,
+#study-screen.hud-hidden .controls:not(:hover),
+#study-screen.hud-hidden .fixed-controls,
+#study-screen.hud-hidden .help-toggle {
     opacity: 0 !important;
-    pointer-events: none;
-    visibility: hidden;
+    visibility: hidden !important;
+    pointer-events: none !important;
 }
 
-/* Restore pointer events and visibility when hovering over controls area */
-.hud-hidden .controls:hover {
+/* Special handling for help toggle in HUD hidden state */
+#study-screen.hud-hidden .help-toggle {
+    display: none !important;
+}
+
+/* Only controls (answer buttons) can be shown on hover when HUD is hidden */
+#study-screen.hud-hidden .controls:hover {
     opacity: 1 !important;
-    pointer-events: auto;
-    visibility: visible;
+    visibility: visible !important;
+    pointer-events: auto !important;
 }
 
 /* Mobile optimizations */
