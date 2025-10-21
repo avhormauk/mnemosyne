@@ -247,6 +247,7 @@ function undoLastAction() {
 function toggleHud() {
     isHudHidden = !isHudHidden;
     document.getElementById('study-screen').classList.toggle('hud-hidden', isHudHidden);
+    document.querySelector('.fixed-controls').classList.toggle('hidden', isHudHidden);
 }
 
 function showComplete() {
