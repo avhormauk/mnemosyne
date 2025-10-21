@@ -7,7 +7,7 @@ let againCount = 0;
 let hardCount = 0;
 let isShuffleEnabled = false;
 let isHudHidden = false;
-let lastAction = null; // Store the last card action for undo
+let actionHistory = []; // Store the history of card actions for undo
 
 function parseFlashcards(text) {
     const lines = text.split('\n');
@@ -105,7 +105,6 @@ function startStudying() {
     deck = cards;
     document.getElementById('input-screen').style.display = 'none';
     document.getElementById('study-screen').style.display = 'block';
-    document.querySelector('.fixed-controls').classList.add('hidden');
     currentIndex = 0;
     completedCount = 0;
     againCount = 0;
@@ -177,7 +176,7 @@ function handleEasy() {
     const card = deck[currentIndex];
     deck.splice(currentIndex, 1);
     completedCount++;
-    lastAction = { type: 'easy', card, position: currentIndex };
+    actionHistory.push({ type: 'easy', card, position: currentIndex });
     
     if (currentIndex >= deck.length) {
         currentIndex = 0;
@@ -191,7 +190,7 @@ function handleHard() {
     const card = deck.splice(currentIndex, 1)[0];
     deck.push(card);
     hardCount++;
-    lastAction = { type: 'hard', card, position: currentIndex };
+    actionHistory.push({ type: 'hard', card, position: currentIndex });
     
     if (currentIndex >= deck.length) {
         currentIndex = 0;
@@ -206,7 +205,7 @@ function handleAgain() {
     const newPosition = Math.min(currentIndex + 3, deck.length);
     deck.splice(newPosition, 0, card);
     againCount++;
-    lastAction = { type: 'again', card, position: currentIndex, newPosition };
+    actionHistory.push({ type: 'again', card, position: currentIndex, newPosition });
     
     if (currentIndex >= deck.length) {
         currentIndex = 0;
@@ -216,7 +215,9 @@ function handleAgain() {
 }
 
 function undoLastAction() {
-    if (!lastAction) return;
+    if (actionHistory.length === 0) return;
+    
+    const lastAction = actionHistory.pop();
     
     switch (lastAction.type) {
         case 'easy':
@@ -236,9 +237,11 @@ function undoLastAction() {
     }
     
     currentIndex = lastAction.position;
-    lastAction = null;
+    const wasFlipped = isFlipped;
     showCard();
-    flipCard();
+    if (wasFlipped) {
+        flipCard();
+    }
 }
 
 function toggleHud() {
@@ -501,6 +504,12 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (e.key.toLowerCase() === 'e') {
                 e.preventDefault();
                 startCardEdit();
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                undoLastAction();
+            } else if (e.key.toLowerCase() === 'h') {
+                e.preventDefault();
+                toggleHud();
             }
         } 
         // Handle navigation and other controls
