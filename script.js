@@ -6,6 +6,8 @@ let completedCount = 0;
 let againCount = 0;
 let hardCount = 0;
 let isShuffleEnabled = false;
+let isHudHidden = false;
+let lastAction = null; // Store the last card action for undo
 
 function parseFlashcards(text) {
     const lines = text.split('\n');
@@ -166,8 +168,10 @@ function flashButton(type) {
 
 function handleEasy() {
     flashButton('easy');
+    const card = deck[currentIndex];
     deck.splice(currentIndex, 1);
     completedCount++;
+    lastAction = { type: 'easy', card, position: currentIndex };
     
     if (currentIndex >= deck.length) {
         currentIndex = 0;
@@ -181,6 +185,7 @@ function handleHard() {
     const card = deck.splice(currentIndex, 1)[0];
     deck.push(card);
     hardCount++;
+    lastAction = { type: 'hard', card, position: currentIndex };
     
     if (currentIndex >= deck.length) {
         currentIndex = 0;
@@ -195,12 +200,48 @@ function handleAgain() {
     const newPosition = Math.min(currentIndex + 3, deck.length);
     deck.splice(newPosition, 0, card);
     againCount++;
+    lastAction = { type: 'again', card, position: currentIndex, newPosition };
     
     if (currentIndex >= deck.length) {
         currentIndex = 0;
     }
     
     showCard();
+}
+
+function undoLastAction() {
+    if (!lastAction) return;
+    
+    switch (lastAction.type) {
+        case 'easy':
+            deck.splice(lastAction.position, 0, lastAction.card);
+            completedCount--;
+            break;
+        case 'hard':
+            deck.pop(); // Remove from end
+            deck.splice(lastAction.position, 0, lastAction.card);
+            hardCount--;
+            break;
+        case 'again':
+            deck.splice(lastAction.newPosition, 1); // Remove from new position
+            deck.splice(lastAction.position, 0, lastAction.card);
+            againCount--;
+            break;
+    }
+    
+    currentIndex = lastAction.position;
+    lastAction = null;
+    showCard();
+    flipCard();
+}
+
+function toggleHud() {
+    isHudHidden = !isHudHidden;
+    const stats = document.getElementById('stats');
+    const hintText = document.getElementById('hint-text');
+    
+    stats.style.opacity = isHudHidden ? '0' : '1';
+    if (hintText) hintText.style.opacity = isHudHidden ? '0' : '0.6';
 }
 
 function showComplete() {
@@ -452,14 +493,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 startCardEdit();
             }
         } 
-        // Handle navigation when card is not flipped
-        else if (!isFlipped && deck.length > 0) {
-            if (e.key === 'ArrowLeft') {
+        // Handle navigation and other controls
+        else if (deck.length > 0) {
+            if (e.key === 'ArrowLeft' && !isFlipped) {
                 e.preventDefault();
                 navigateBack();
-            } else if (e.key === 'ArrowRight') {
+            } else if (e.key === 'ArrowRight' && !isFlipped) {
                 e.preventDefault();
                 navigateForward();
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                undoLastAction();
+            } else if (e.key.toLowerCase() === 'h') {
+                e.preventDefault();
+                toggleHud();
             }
         }
     });

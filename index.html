@@ -62,20 +62,22 @@
 //answer text</pre>
                 
                 <div class="help-title">controls:</div>
-                <pre>space        flip card
+                <pre>space        flip card / mark as 'easy'
 e            edit card
 ctrl+enter   save edits
 1            mark as 'again'
 2            mark as 'hard'
-3/space      mark as 'easy'
-
+3            mark as 'easy'
+h            toggle hud visibility
+↑            undo last action
+← →          navigate cards
 esc          cancel edits/exit</pre>
                 <button onclick="toggleHelp()">close</button>
             </div>
         </div>
 
         <div id="study-screen">
-            <div class="stats" id="stats"></div>
+            <div class="st  ats" id="stats"></div>
             <div class="hint-text" id="hint-text">space/click to flip, ← → to navigate, esc to exit</div>
             <div class="card-container" onclick="flipCard()">
                 <div class="card-front" id="card-question" spellcheck="false"></div>
