@@ -152,6 +152,24 @@ button:active {
     transform: scale(0.98);
 }
 
+@keyframes buttonFlash {
+    0% { transform: scale(1); }
+    50% { transform: scale(0.95); background: var(--flash-color, #1a1a1a); color: white; }
+    100% { transform: scale(1); }
+}
+
+.button-flash {
+    animation: buttonFlash 0.2s ease;
+}
+
+.flash-again { --flash-color: #ff4d4d; }
+.flash-hard { --flash-color: #ffa64d; }
+.flash-easy { --flash-color: #4dff4d; }
+
+body.dark-mode .flash-again { --flash-color: #ff3333; }
+body.dark-mode .flash-hard { --flash-color: #ff9933; }
+body.dark-mode .flash-easy { --flash-color: #33ff33; }
+
 .card-container {
     position: fixed;
     top: 80px;
@@ -159,7 +177,7 @@ button:active {
     left: 50%;
     transform: translateX(-50%);
     width: 100%;
-    max-width: 800px;
+    max-width: 1200px;
     padding: 0 40px;
     font-size: 28px;
     font-weight: 400;
@@ -167,18 +185,22 @@ button:active {
     white-space: pre-wrap;
     cursor: pointer;
     text-align: center;
-    display: grid;
-    grid-template-rows: auto 1fr;
-    gap: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
     user-select: none;
 }
 
 .card-front {
     font-weight: 500;
     padding: 20px;
-    margin-top: 40px;
+    margin-top: 20px;
     letter-spacing: -0.01em;
     outline: none;
+    max-width: 70%;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .card-front[contenteditable="true"],
@@ -208,11 +230,12 @@ body.dark-mode .card-back[contenteditable="true"] {
 .card-back {
     padding: 20px;
     display: none;
-    place-self: center;
-    width: 100%;
+    width: 70%;
     font-weight: 400;
     opacity: 0;
     animation: fadeIn 0.3s ease forwards;
+    margin: 0 auto;
+    margin-top: -20px;
 }
 
 @keyframes fadeIn {

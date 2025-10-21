@@ -74,6 +74,11 @@ function toggleShuffle() {
     const shuffleBtn = document.getElementById('shuffle-button');
     shuffleBtn.setAttribute('aria-pressed', isShuffleEnabled.toString());
     shuffleBtn.classList.toggle('active');
+    
+    shuffleBtn.classList.add('button-flash');
+    setTimeout(() => {
+        shuffleBtn.classList.remove('button-flash');
+    }, 200);
 }
 
 function startStudying() {
@@ -144,7 +149,23 @@ function flipCard() {
     if (hintText) hintText.style.display = 'none';
 }
 
+function flashButton(type) {
+    const controls = document.getElementById('controls');
+    const buttons = controls.getElementsByTagName('button');
+    let button;
+    
+    if (type === 'easy') button = buttons[2];
+    else if (type === 'hard') button = buttons[1];
+    else if (type === 'again') button = buttons[0];
+    
+    button.classList.add('button-flash', `flash-${type}`);
+    setTimeout(() => {
+        button.classList.remove('button-flash', `flash-${type}`);
+    }, 200);
+}
+
 function handleEasy() {
+    flashButton('easy');
     deck.splice(currentIndex, 1);
     completedCount++;
     
@@ -156,6 +177,7 @@ function handleEasy() {
 }
 
 function handleHard() {
+    flashButton('hard');
     const card = deck.splice(currentIndex, 1)[0];
     deck.push(card);
     hardCount++;
@@ -168,6 +190,7 @@ function handleHard() {
 }
 
 function handleAgain() {
+    flashButton('again');
     const card = deck.splice(currentIndex, 1)[0];
     const newPosition = Math.min(currentIndex + 3, deck.length);
     deck.splice(newPosition, 0, card);
