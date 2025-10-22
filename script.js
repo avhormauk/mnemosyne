@@ -552,8 +552,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // 'i' or '?' to toggle help
-        if (e.key.toLowerCase() === 'i' || e.key === '?') {
+        // 'i' or '?' to toggle help - only if not in textarea
+        if ((e.key.toLowerCase() === 'i' || e.key === '?') && document.activeElement !== textarea) {
             e.preventDefault();
             toggleHelp();
             return;
@@ -562,13 +562,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const studyScreen = document.getElementById('study-screen');
         // Only process other keyboard events if study screen is visible
         if (getComputedStyle(studyScreen).display === 'none') return;
-        
-        // 'a' key to open full editor
-        if (e.key.toLowerCase() === 'a') {
-            e.preventDefault();
-            openEdit();
-            return;
-        }
         
         // Handle spacebar
         if (e.code === 'Space') {
@@ -595,7 +588,7 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (e.key.toLowerCase() === 'e') {
                 e.preventDefault();
                 startCardEdit();
-            } else if (e.key === 'ArrowUp') {
+            } else if (e.key === 'ArrowLeft') {
                 e.preventDefault();
                 undoLastAction();
             } else if (e.key.toLowerCase() === 'h') {
@@ -611,9 +604,6 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (e.key === 'ArrowRight' && !isFlipped) {
                 e.preventDefault();
                 navigateForward();
-            } else if (e.key === 'ArrowUp') {
-                e.preventDefault();
-                undoLastAction();
             } else if (e.key.toLowerCase() === 'h') {
                 e.preventDefault();
                 toggleHud();
