@@ -544,8 +544,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // 'i' or '?' to toggle help
-        if (e.key.toLowerCase() === 'i' || e.key === '?') {
+        // 'i' or '?' to toggle help - only if not in textarea
+        const textarea = document.getElementById('card-input');
+        if ((e.key.toLowerCase() === 'i' || e.key === '?') && document.activeElement !== textarea) {
             e.preventDefault();
             toggleHelp();
             return;
@@ -554,13 +555,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const studyScreen = document.getElementById('study-screen');
         // Only process other keyboard events if study screen is visible
         if (getComputedStyle(studyScreen).display === 'none') return;
-        
-        // 'a' key to open full editor
-        if (e.key.toLowerCase() === 'a') {
-            e.preventDefault();
-            openEdit();
-            return;
-        }
         
         // Handle spacebar
         if (e.code === 'Space') {
