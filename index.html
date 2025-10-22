@@ -48,8 +48,8 @@
     
     <div class="container">
         <div id="input-screen" class="fade-in">
-            <div class="stats fade-in-up" id="input-stats" style="animation-delay: 0.3s">0</div>
             <h1 class="title" id="title">Mnemosyne</h1>
+            <div class="stats fade-in-up" id="input-stats" style="animation-delay: 0.3s">0</div>
             <textarea id="card-input" placeholder="paste your flashcards here..." spellcheck="false" class="fade-in-up" style="animation-delay: 0.2s"></textarea>
             <button id="shuffle-button" class="shuffle-button fade-in-up" onclick="toggleShuffle()" aria-pressed="false" style="animation-delay: 0.3s">shuffle</button>
             <button class="start-button fade-in-up" onclick="startStudying()" style="animation-delay: 0.4s">study</button>
@@ -66,13 +66,12 @@
                 <pre>space        flip card / mark as 'easy'
 e            edit card
 ctrl+enter   save edits / start session
-a            add/edit cards (full editor)
 i / ?        toggle help
 1            mark as 'again'
 2            mark as 'hard'
 3            mark as 'easy'
 h            toggle hud visibility
-↑            undo last action
+←            undo last action
 ← →          navigate cards
 esc          cancel edits/exit</pre>
                 <button onclick="toggleHelp()">close</button>

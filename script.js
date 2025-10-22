@@ -177,50 +177,58 @@ function flashButton(type) {
     button.classList.add('button-flash');
     setTimeout(() => {
         button.classList.remove('button-flash');
-    }, 150);
+    }, 200);
 }
 
 function handleEasy() {
-    flashButton('easy');
-    const card = deck[currentIndex];
-    deck.splice(currentIndex, 1);
-    completedCount++;
-    actionHistory.push({ type: 'easy', card, position: currentIndex });
-    
-    if (currentIndex >= deck.length) {
-        currentIndex = 0;
+    if (isFlipped) {
+        flashButton('easy');
+        setTimeout(() => {
+            const card = deck[currentIndex];
+            deck.splice(currentIndex, 1);
+            completedCount++;
+            actionHistory.push({ type: 'easy', card, position: currentIndex });
+            
+            if (currentIndex >= deck.length) {
+                currentIndex = 0;
+            }
+            
+            showCard();
+        }, 200);
     }
-    
-    setTimeout(() => showCard(), 150);
 }
 
 function handleHard() {
     flashButton('hard');
-    const card = deck.splice(currentIndex, 1)[0];
-    deck.push(card);
-    hardCount++;
-    actionHistory.push({ type: 'hard', card, position: currentIndex });
-    
-    if (currentIndex >= deck.length) {
-        currentIndex = 0;
-    }
-    
-    setTimeout(() => showCard(), 150);
+    setTimeout(() => {
+        const card = deck.splice(currentIndex, 1)[0];
+        deck.push(card);
+        hardCount++;
+        actionHistory.push({ type: 'hard', card, position: currentIndex });
+        
+        if (currentIndex >= deck.length) {
+            currentIndex = 0;
+        }
+        
+        showCard();
+    }, 200);
 }
 
 function handleAgain() {
     flashButton('again');
-    const card = deck.splice(currentIndex, 1)[0];
-    const newPosition = Math.min(currentIndex + 3, deck.length);
-    deck.splice(newPosition, 0, card);
-    againCount++;
-    actionHistory.push({ type: 'again', card, position: currentIndex, newPosition });
-    
-    if (currentIndex >= deck.length) {
-        currentIndex = 0;
-    }
-    
-    setTimeout(() => showCard(), 150);
+    setTimeout(() => {
+        const card = deck.splice(currentIndex, 1)[0];
+        const newPosition = Math.min(currentIndex + 3, deck.length);
+        deck.splice(newPosition, 0, card);
+        againCount++;
+        actionHistory.push({ type: 'again', card, position: currentIndex, newPosition });
+        
+        if (currentIndex >= deck.length) {
+            currentIndex = 0;
+        }
+        
+        showCard();
+    }, 200);
 }
 
 function undoLastAction() {
@@ -544,9 +552,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // 'i' or '?' to toggle help - only if not in textarea
-        const textarea = document.getElementById('card-input');
-        if ((e.key.toLowerCase() === 'i' || e.key === '?') && document.activeElement !== textarea) {
+        // 'i' or '?' to toggle help
+        if (e.key.toLowerCase() === 'i' || e.key === '?') {
             e.preventDefault();
             toggleHelp();
             return;
@@ -555,6 +562,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const studyScreen = document.getElementById('study-screen');
         // Only process other keyboard events if study screen is visible
         if (getComputedStyle(studyScreen).display === 'none') return;
+        
+        // 'a' key to open full editor
+        if (e.key.toLowerCase() === 'a') {
+            e.preventDefault();
+            openEdit();
+            return;
+        }
         
         // Handle spacebar
         if (e.code === 'Space') {

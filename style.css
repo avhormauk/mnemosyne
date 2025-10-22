@@ -159,11 +159,11 @@ button:active {
 }
 
 .button-flash {
-    animation: buttonFlash 0.15s ease;
+    animation: buttonFlash 0.2s ease;
 }
 
 body.dark-mode .button-flash {
-    animation: buttonFlashDark 0.15s ease;
+    animation: buttonFlashDark 0.2s ease;
 }
 
 @keyframes buttonFlashDark {
@@ -312,8 +312,9 @@ html.dark-mode .shuffle-button[aria-pressed="true"] {
     font-size: 18px;
     color: #666;
     position: absolute;
-    left: 10px;
-    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 60px;
     padding: 8px;
     border-radius: 6px;
     background: rgba(255, 255, 255, 0.8);
