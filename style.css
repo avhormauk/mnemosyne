@@ -154,21 +154,23 @@ button:active {
 
 @keyframes buttonFlash {
     0% { transform: scale(1); }
-    50% { transform: scale(0.95); background: var(--flash-color, #1a1a1a); color: white; }
+    50% { transform: scale(0.95); background: white; color: #1a1a1a; border-color: white; }
     100% { transform: scale(1); }
 }
 
 .button-flash {
-    animation: buttonFlash 0.2s ease;
+    animation: buttonFlash 0.15s ease;
 }
 
-.flash-again { --flash-color: #ff4d4d; }
-.flash-hard { --flash-color: #ffa64d; }
-.flash-easy { --flash-color: #4dff4d; }
+body.dark-mode .button-flash {
+    animation: buttonFlashDark 0.15s ease;
+}
 
-body.dark-mode .flash-again { --flash-color: #ff3333; }
-body.dark-mode .flash-hard { --flash-color: #ff9933; }
-body.dark-mode .flash-easy { --flash-color: #33ff33; }
+@keyframes buttonFlashDark {
+    0% { transform: scale(1); }
+    50% { transform: scale(0.95); background: white; color: #0d0d0d; border-color: white; }
+    100% { transform: scale(1); }
+}
 
 .card-container {
     position: fixed;
@@ -520,6 +522,70 @@ body.dark-mode .hint-text {
     opacity: 1 !important;
     visibility: visible !important;
     pointer-events: auto !important;
+}
+
+/* Fade animations */
+@keyframes fadeInAnim {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOutAnim {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+@keyframes fadeInUpAnim {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+        filter: blur(4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0);
+    }
+}
+
+@keyframes charReveal {
+    from {
+        opacity: 0;
+        filter: blur(8px);
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        filter: blur(0);
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeInAnim 0.3s ease forwards;
+}
+
+.fade-out {
+    animation: fadeOutAnim 0.2s ease forwards;
+}
+
+.fade-in-up {
+    animation: fadeInUpAnim 0.5s ease forwards;
+    opacity: 0;
+}
+
+.char-reveal {
+    display: inline-block;
+    opacity: 0;
+    animation: charReveal 0.4s ease forwards;
 }
 
 /* Mobile optimizations */

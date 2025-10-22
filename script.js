@@ -8,6 +8,7 @@ let hardCount = 0;
 let isShuffleEnabled = false;
 let isHudHidden = false;
 let actionHistory = []; // Store the history of card actions for undo
+let isEditing = false;
 
 function parseFlashcards(text) {
     const lines = text.split('\n');
@@ -103,13 +104,21 @@ function startStudying() {
     }
 
     deck = cards;
-    document.getElementById('input-screen').style.display = 'none';
-    document.getElementById('study-screen').style.display = 'block';
-    currentIndex = 0;
-    completedCount = 0;
-    againCount = 0;
-    hardCount = 0;
-    showCard();
+    const inputScreen = document.getElementById('input-screen');
+    const studyScreen = document.getElementById('study-screen');
+    
+    inputScreen.classList.add('fade-out');
+    setTimeout(() => {
+        inputScreen.style.display = 'none';
+        inputScreen.classList.remove('fade-out');
+        studyScreen.style.display = 'block';
+        studyScreen.classList.add('fade-in');
+        currentIndex = 0;
+        completedCount = 0;
+        againCount = 0;
+        hardCount = 0;
+        showCard();
+    }, 200);
 }
 
 function updateStats() {
@@ -165,10 +174,10 @@ function flashButton(type) {
     else if (type === 'hard') button = buttons[1];
     else if (type === 'again') button = buttons[0];
     
-    button.classList.add('button-flash', `flash-${type}`);
+    button.classList.add('button-flash');
     setTimeout(() => {
-        button.classList.remove('button-flash', `flash-${type}`);
-    }, 200);
+        button.classList.remove('button-flash');
+    }, 150);
 }
 
 function handleEasy() {
@@ -182,7 +191,7 @@ function handleEasy() {
         currentIndex = 0;
     }
     
-    showCard();
+    setTimeout(() => showCard(), 150);
 }
 
 function handleHard() {
@@ -196,7 +205,7 @@ function handleHard() {
         currentIndex = 0;
     }
     
-    showCard();
+    setTimeout(() => showCard(), 150);
 }
 
 function handleAgain() {
@@ -211,7 +220,7 @@ function handleAgain() {
         currentIndex = 0;
     }
     
-    showCard();
+    setTimeout(() => showCard(), 150);
 }
 
 function undoLastAction() {
@@ -285,9 +294,17 @@ function openEdit() {
         });
         textarea.value = content.trim();
     }
-    document.getElementById('study-screen').style.display = 'none';
-    document.getElementById('input-screen').style.display = 'block';
-    document.querySelector('.fixed-controls').classList.remove('hidden');
+    const studyScreen = document.getElementById('study-screen');
+    const inputScreen = document.getElementById('input-screen');
+    
+    studyScreen.classList.add('fade-out');
+    setTimeout(() => {
+        studyScreen.style.display = 'none';
+        studyScreen.classList.remove('fade-out');
+        inputScreen.style.display = 'block';
+        inputScreen.classList.add('fade-in');
+        document.querySelector('.fixed-controls').classList.remove('hidden');
+    }, 200);
 }
 
 function cancelCardEdit() {
@@ -301,7 +318,9 @@ function cancelCardEdit() {
     
     // Restore original content
     questionEl.textContent = deck[currentIndex].front;
-    answerEl.textContent = deck[currentIndex].back;
+    if (isFlipped) {
+        answerEl.textContent = deck[currentIndex].back;
+    }
     
     // Restore click-to-flip
     cardContainer.onclick = () => flipCard();
@@ -310,12 +329,7 @@ function cancelCardEdit() {
     isEditing = false;
 }
 
-// Global state for edit mode
-let isEditing = false;
-
 function startCardEdit() {
-    if (!isFlipped) return; // Only allow editing when card is flipped
-    
     isEditing = true;
     const questionEl = document.getElementById('card-question');
     const answerEl = document.getElementById('card-answer');
@@ -324,10 +338,30 @@ function startCardEdit() {
     // Disable click-to-flip while editing
     cardContainer.onclick = null;
     
-    // Enable editing
+    // Enable editing on question
     questionEl.setAttribute('contenteditable', 'true');
-    answerEl.setAttribute('contenteditable', 'true');
-    questionEl.focus();
+    
+    // Only enable answer editing if card is flipped
+    if (isFlipped) {
+        answerEl.setAttribute('contenteditable', 'true');
+        // Set cursor to end of answer
+        answerEl.focus();
+        const range = document.createRange();
+        const sel = window.getSelection();
+        range.selectNodeContents(answerEl);
+        range.collapse(false);
+        sel.removeAllRanges();
+        sel.addRange(range);
+    } else {
+        // Just focus on question if not flipped
+        questionEl.focus();
+        const range = document.createRange();
+        const sel = window.getSelection();
+        range.selectNodeContents(questionEl);
+        range.collapse(false);
+        sel.removeAllRanges();
+        sel.addRange(range);
+    }
 }
 
 // Main keyboard event handler for edit mode
@@ -371,7 +405,11 @@ function saveCardEdits() {
     
     // Update the current card
     deck[currentIndex].front = questionEl.textContent.trim();
-    deck[currentIndex].back = answerEl.textContent.trim();
+    
+    // Only update answer if it was being edited (card was flipped)
+    if (isFlipped) {
+        deck[currentIndex].back = answerEl.textContent.trim();
+    }
     
     // Update the input textarea immediately
     const textarea = document.getElementById('card-input');
@@ -430,6 +468,23 @@ function pasteText() {
     }
 }
 
+// Character-by-character reveal animation for title
+function animateTitle() {
+    const title = document.getElementById('title');
+    const text = title.textContent;
+    title.textContent = '';
+    title.style.opacity = '1';
+    
+    const chars = text.split('');
+    chars.forEach((char, i) => {
+        const span = document.createElement('span');
+        span.textContent = char;
+        span.className = 'char-reveal';
+        span.style.animationDelay = `${i * 0.05}s`;
+        title.appendChild(span);
+    });
+}
+
 // Initialize when the page loads
 document.addEventListener('DOMContentLoaded', () => {
     // Sync dark mode with html element - default to dark mode
@@ -445,6 +500,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (savedDarkMode === null) {
         localStorage.setItem('darkMode', 'true');
     }
+
+    // Animate title
+    animateTitle();
 
     // Setup input text change handler for live card count
     const textarea = document.getElementById('card-input');
@@ -462,6 +520,16 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        // Check if we're on input screen for Ctrl+Enter
+        const inputScreen = document.getElementById('input-screen');
+        if (getComputedStyle(inputScreen).display === 'block') {
+            if (e.ctrlKey && e.key === 'Enter') {
+                e.preventDefault();
+                startStudying();
+                return;
+            }
+        }
+
         if (e.key === 'Escape') {
             const helpModal = document.getElementById('help-modal');
             if (helpModal.classList.contains('visible')) {
@@ -476,9 +544,23 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
+        // 'i' or '?' to toggle help
+        if (e.key.toLowerCase() === 'i' || e.key === '?') {
+            e.preventDefault();
+            toggleHelp();
+            return;
+        }
+
         const studyScreen = document.getElementById('study-screen');
         // Only process other keyboard events if study screen is visible
         if (getComputedStyle(studyScreen).display === 'none') return;
+        
+        // 'a' key to open full editor
+        if (e.key.toLowerCase() === 'a') {
+            e.preventDefault();
+            openEdit();
+            return;
+        }
         
         // Handle spacebar
         if (e.code === 'Space') {
@@ -527,6 +609,9 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (e.key.toLowerCase() === 'h') {
                 e.preventDefault();
                 toggleHud();
+            } else if (e.key.toLowerCase() === 'e') {
+                e.preventDefault();
+                startCardEdit();
             }
         }
     });
